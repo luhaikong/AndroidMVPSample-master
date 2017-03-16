@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
  * @author Javen
  *
  */
-public class MD5Utils {
+public class MD5Util {
     /**
      * 使用md5的算法进行加密
      */
