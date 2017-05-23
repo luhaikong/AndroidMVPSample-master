@@ -1,5 +1,6 @@
 package com.common.lhk.library.mvp;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Flowable;
@@ -13,25 +14,25 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
 
-public class BasePresenter<V> implements Presenter<V> {
-    public V mvpView;
+public abstract class BasePresenter<V> implements Presenter<V> {
     private CompositeDisposable mCompositeDisposable;
+    private Context baseContext;
 
-    @Override
-    public void attachView(V mvpView) {
-        this.mvpView = mvpView;
+    public BasePresenter(V view, Context context) {
+        this.mCompositeDisposable = new CompositeDisposable();
+        this.baseContext = context;
+        this.attachView(view);
     }
 
     @Override
     public void detachView() {
-        this.mvpView = null;
         unSubscribe();
     }
 
     /**
      * 取消所有订阅关系
      */
-    private void unSubscribe() {
+    protected void unSubscribe() {
         if (mCompositeDisposable != null) {
             mCompositeDisposable.clear();
         }
@@ -61,7 +62,7 @@ public class BasePresenter<V> implements Presenter<V> {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }
-        mCompositeDisposable.add(observable
+        Disposable disposable = observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer() {
@@ -84,6 +85,8 @@ public class BasePresenter<V> implements Presenter<V> {
                     public void accept(@NonNull Disposable disposable) throws Exception {
                         subscriber.onSubscribe(disposable);
                     }
-                }));
+                });
+        mCompositeDisposable.add(disposable);
     }
+
 }

@@ -52,4 +52,28 @@ public class BaseActivity extends AppCompatActivity {
     public void showSnackBar(String res){
         Snackbar.make(getWindow().getDecorView(), res, Snackbar.LENGTH_SHORT).show();
     }
+
+    public void toastLongShow(int resId) {
+        Toast.makeText(mBaseContext, resId, Toast.LENGTH_LONG).show();
+    }
+
+    public void toastLongShow(String res) {
+        Toast.makeText(mBaseContext, res, Toast.LENGTH_LONG).show();
+    }
+
+    public void showLongSnackBar(View topView, int resId){
+        Snackbar.make(topView,resId,Snackbar.LENGTH_LONG).show();
+    }
+
+    public void showLongSnackBar(int resId){
+        Snackbar.make(getWindow().getDecorView(), resId, Snackbar.LENGTH_LONG).show();
+    }
+
+    public void showLongSnackBar(View topView, String res){
+        Snackbar.make(topView,res,Snackbar.LENGTH_LONG).show();
+    }
+
+    public void showLongSnackBar(String res){
+        Snackbar.make(getWindow().getDecorView(), res, Snackbar.LENGTH_LONG).show();
+    }
 }

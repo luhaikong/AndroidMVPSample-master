@@ -11,16 +11,31 @@ import com.wuxiaolong.androidmvpsample.retrofit.ApiStores;
 import com.wuxiaolong.androidmvpsample.retrofit.AppClient;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.subscribers.ResourceSubscriber;
 
 public class MainPresenter extends BasePresenter<IMainView> {
 
     private ApiStores apiStores;
     private ResourceSubscriber subscriber;
-    private boolean isFlowable = true;
+    private IMainView onMainView;
+    private boolean isFlowAble = false;
+
+    @Override
+    public void attachView(IMainView view) {
+        this.onMainView = view;
+    }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+        this.onMainView = null;
+    }
+
 
     public MainPresenter(IMainView view, Context context) {
-        attachView(view);
+        super(view, context);
         apiStores = AppClient.retrofit(context).create(ApiStores.class);
     }
 
@@ -29,49 +44,52 @@ public class MainPresenter extends BasePresenter<IMainView> {
      * @param cityId
      */
     public void loadData(String cityId) {
-        mvpView.showLoading();
-        if (!isFlowable){
-            addSubscription(apiStores.loadData(cityId),
-                    new SubscriberCallBackObserver<>(new ApiCallbackAdapter<MainBean>() {
-                        @Override
-                        public void onSuccess(MainBean model) {
-                            mvpView.getDataSuccess(model);
-                        }
-
-                        @Override
-                        public void onFailure(int code, String msg) {
-                            mvpView.getDataFail(msg);
-                        }
-
-                        @Override
-                        public void onCompleted() {
-                            mvpView.hideLoading();
-                        }
-                    }));
-        } else {
-            Flowable<MainBean> flowable = apiStores.loadFlowableData(cityId);
-            subscriber = new SubscriberCallBackFlowable<>(new ApiCallbackAdapter<MainBean>() {
+        onMainView.showLoading();
+        if (!isFlowAble){
+            Observable<MainBean> observable = apiStores.loadData(cityId);
+            Observer observer = new SubscriberCallBackObserver<>(new ApiCallbackAdapter<MainBean>() {
                 @Override
                 public void onSuccess(MainBean model) {
-                    mvpView.getDataSuccess(model);
+                    onMainView.getDataSuccess(model);
                 }
 
                 @Override
                 public void onFailure(int code, String msg) {
-                    mvpView.getDataFail(msg);
+                    onMainView.getDataFail(msg);
                 }
 
                 @Override
                 public void onCompleted() {
-                    mvpView.hideLoading();
+                    onMainView.hideLoading();
                 }
             });
-            addSubscription(flowable, subscriber);
+            addSubscription(observable, observer);
+        } else {
+            Flowable<MainBean> flowAble = apiStores.loadFlowableData(cityId);
+            subscriber = new SubscriberCallBackFlowable<>(new ApiCallbackAdapter<MainBean>() {
+                @Override
+                public void onSuccess(MainBean model) {
+                    onMainView.getDataSuccess(model);
+                }
+
+                @Override
+                public void onFailure(int code, String msg) {
+                    onMainView.getDataFail(msg);
+                }
+
+                @Override
+                public void onCompleted() {
+                    onMainView.hideLoading();
+                }
+            });
+            addSubscription(flowAble, subscriber);
         }
 
     }
 
-    public void unSubscribe(){
+    @Override
+    protected void unSubscribe() {
+        super.unSubscribe();
         if (subscriber!=null&&!subscriber.isDisposed()){
             subscriber.dispose();
             Log.d("Main","unSubscribe");
@@ -83,67 +101,67 @@ public class MainPresenter extends BasePresenter<IMainView> {
      * @param cityId
      */
     public void loadSecondData(String cityId){
-        mvpView.showLoading();
+        onMainView.showLoading();
         if (apiStores!=null)
         addSubscription(apiStores.loadData(cityId),
                 new SubscriberCallBackObserver<>(new ApiCallbackAdapter<MainBean>() {
                     @Override
                     public void onSuccess(MainBean model) {
-                        mvpView.getSecondSuccess(model);
+                        onMainView.getSecondSuccess(model);
                     }
 
                     @Override
                     public void onFailure(int code, String msg) {
-                        mvpView.getSecondFail(msg);
+                        onMainView.getSecondFail(msg);
                     }
 
                     @Override
                     public void onCompleted() {
-                        mvpView.hideLoading();
+                        onMainView.hideLoading();
                     }
                 }));
     }
     
     public void loadData(){
-        mvpView.showLoading();
+        onMainView.showLoading();
         if (apiStores!=null)
         addSubscription(apiStores.loadData("feec2e995632ec4329ec4591bdd7c20b","sf","575677355677"),
                 new SubscriberCallBackObserver<>(new ApiCallbackAdapter<Root>() {
                     @Override
                     public void onSuccess(Root model) {
-                        mvpView.getSecondSuccess(model);
+                        onMainView.getSecondSuccess(model);
                     }
 
                     @Override
                     public void onFailure(int code, String msg) {
-                        mvpView.getSecondFail(msg);
+                        onMainView.getSecondFail(msg);
                     }
 
                     @Override
                     public void onCompleted() {
-                        mvpView.hideLoading();
+                        onMainView.hideLoading();
                     }
                 }));
     }
     
     public void postData(){
-        mvpView.showLoading();
+        onMainView.showLoading();
         if (apiStores!=null)
         addSubscription(apiStores.postData("feec2e995632ec4329ec4591bdd7c20b","sf","575677355677"),
                 new SubscriberCallBackObserver<>(new ApiCallbackAdapter<Root>() {
                     @Override
                     public void onSuccess(Root model) {
-                        mvpView.getSecondSuccess(model);
+                        onMainView.getSecondSuccess(model);
                     }
 
                     @Override
                     public void onFailure(int code, String msg) {
-                        mvpView.getSecondFail(msg);
+                        onMainView.getSecondFail(msg);
                     }
 
                     @Override
                     public void onCompleted() {
-                        mvpView.hideLoading();
+                        onMainView.hideLoading();
                     }
                 }));
     }

@@ -17,8 +17,7 @@ import java.util.Locale;
 public class NetWorkUtil {
 
 	/**
-	 * 获取当前的网络状态 
-	 *  
+	 * 获取当前的网络状类型
 	 * @param context
 	 * @return  
 	 * 	-1：没有网络,
@@ -127,7 +126,9 @@ public class NetWorkUtil {
 		return false;
 	}
 
-    //获取IP地址
+	/**
+	 * 获取本机IP地址
+	 */
     public static String getEthIP() {
         String ip = "";
         try {

@@ -41,16 +41,17 @@ public class AppClient {
      * @return
      */
     public static OkHttpClient genericClient(){
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.retryOnConnectionFailure(true)
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         if (BuildConfig.DEBUG) {
             // Log信息拦截器
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             //设置 Debug Log 模式
-            builder.addInterceptor(loggingInterceptor);
+            httpClient.addInterceptor(loggingInterceptor);
         }
-        return builder.build();
+        return httpClient.build();
     }
 
     /**

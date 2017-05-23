@@ -10,6 +10,10 @@ public class AppDataFile {
     private File mAppFile;
 	private static AppDataFile mAppDataFile;
 	private static final String FILE_ROOT_PATH="luhaikong";
+
+	/**
+	 * 缓存
+	 */
 	private static final String FILE_CACHE="cache";
 
     /**
@@ -39,7 +43,7 @@ public class AppDataFile {
 	
 	public static String rootFileName=null;
 	
-	public AppDataFile(String rootFileName) {
+	private AppDataFile(String rootFileName) {
         if(sdcard==null){
             sdcard=Environment.getDataDirectory();
         }

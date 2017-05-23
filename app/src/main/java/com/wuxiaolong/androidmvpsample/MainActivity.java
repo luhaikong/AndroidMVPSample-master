@@ -39,7 +39,7 @@ public class MainActivity extends MvpActivity<MainPresenter>
         mvpPresenter.loadData("101010100");
         //mvpPresenter.loadSecondData("101290101");
         //mvpPresenter.loadData();
-        mvpPresenter.postData();
+//        mvpPresenter.postData();
     }
 
     @Override
@@ -97,7 +97,6 @@ public class MainActivity extends MvpActivity<MainPresenter>
     @Override
     protected void onDestroy() {
         ButterKnife.unbind(this);
-        mvpPresenter.unSubscribe();
         super.onDestroy();
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 本地数据加载工具类
  */
-public class LocalDataUitl {
+public class AssetsFileUtil {
 
 	/**
 	 * 返回list列表数据
