@@ -20,7 +20,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     private ApiStores apiStores;
     private ResourceSubscriber subscriber;
     private IMainView onMainView;
-    private boolean isFlowAble = false;
+    private boolean isFlowAble = true;
 
     @Override
     public void attachView(IMainView view) {
@@ -35,7 +35,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
 
     public MainPresenter(IMainView view, Context context) {
-        super(view, context);
+        super(view);
         apiStores = AppClient.retrofit(context).create(ApiStores.class);
     }
 
@@ -63,7 +63,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     onMainView.hideLoading();
                 }
             });
-            addSubscription(observable, observer);
+            addioSubscription(observable, observer);
         } else {
             Flowable<MainBean> flowAble = apiStores.loadFlowableData(cityId);
             subscriber = new SubscriberCallBackFlowable<>(new ApiCallbackAdapter<MainBean>() {
@@ -82,7 +82,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     onMainView.hideLoading();
                 }
             });
-            addSubscription(flowAble, subscriber);
+            addioSubscription(flowAble, subscriber);
         }
 
     }
@@ -103,7 +103,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     public void loadSecondData(String cityId){
         onMainView.showLoading();
         if (apiStores!=null)
-        addSubscription(apiStores.loadData(cityId),
+        addioSubscription(apiStores.loadData(cityId),
                 new SubscriberCallBackObserver<>(new ApiCallbackAdapter<MainBean>() {
                     @Override
                     public void onSuccess(MainBean model) {
@@ -125,7 +125,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     public void loadData(){
         onMainView.showLoading();
         if (apiStores!=null)
-        addSubscription(apiStores.loadData("feec2e995632ec4329ec4591bdd7c20b","sf","575677355677"),
+        addioSubscription(apiStores.loadData("feec2e995632ec4329ec4591bdd7c20b","sf","575677355677"),
                 new SubscriberCallBackObserver<>(new ApiCallbackAdapter<Root>() {
                     @Override
                     public void onSuccess(Root model) {
@@ -147,7 +147,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     public void postData(){
         onMainView.showLoading();
         if (apiStores!=null)
-        addSubscription(apiStores.postData("feec2e995632ec4329ec4591bdd7c20b","sf","575677355677"),
+        addioSubscription(apiStores.postData("feec2e995632ec4329ec4591bdd7c20b","sf","575677355677"),
                 new SubscriberCallBackObserver<>(new ApiCallbackAdapter<Root>() {
                     @Override
                     public void onSuccess(Root model) {

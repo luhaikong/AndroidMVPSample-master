@@ -10,18 +10,25 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
 
 /**
  * @param <V> View 接口
+ * @param <T> Object 数据
  */
-public abstract class BasePresenter<V> implements Presenter<V> {
+public abstract class BaseFilterPresenter<V,T> implements Presenter<V> {
     private CompositeDisposable mCompositeDisposable;
+    private ItestinFilter itestinFilter;
 
-    public BasePresenter(V view) {
+    public BaseFilterPresenter(V view) {
         this.mCompositeDisposable = new CompositeDisposable();
         this.attachView(view);
+    }
+
+    public void setItestinFilter(ItestinFilter itestinFilter) {
+        this.itestinFilter = itestinFilter;
     }
 
     @Override
@@ -49,6 +56,15 @@ public abstract class BasePresenter<V> implements Presenter<V> {
             mCompositeDisposable = new CompositeDisposable();
         }
         io2main(flowable)
+                .filter(new Predicate<T>() {
+                    @Override
+                    public boolean test(T o) throws Exception {
+                        if (itestinFilter!=null){
+                            itestinFilter.testInfilter(o);
+                        }
+                        return true;
+                    }
+                })
                 .subscribe(subscriber);
         mCompositeDisposable.add(subscriber);
     }
@@ -59,11 +75,20 @@ public abstract class BasePresenter<V> implements Presenter<V> {
      * @param flowable
      * @param subscriber
      */
-    protected void addThreadSubscription(Flowable flowable,ResourceSubscriber subscriber){
+    protected void addThreadSubscription(Flowable flowable,ResourceSubscriber<T> subscriber){
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }
         newThread2main(flowable)
+                .filter(new Predicate() {
+                    @Override
+                    public boolean test(Object o) throws Exception {
+                        if (itestinFilter!=null){
+                            itestinFilter.testInfilter(o);
+                        }
+                        return true;
+                    }
+                })
                 .subscribe(subscriber);
         mCompositeDisposable.add(subscriber);
     }
@@ -80,6 +105,15 @@ public abstract class BasePresenter<V> implements Presenter<V> {
         }
 
         Disposable disposable = io2main(observable)
+                .filter(new Predicate<T>() {
+                    @Override
+                    public boolean test(T o) throws Exception {
+                        if (itestinFilter!=null){
+                            itestinFilter.testInfilter(o);
+                        }
+                        return true;
+                    }
+                })
                 .subscribe(new Consumer() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
@@ -116,6 +150,15 @@ public abstract class BasePresenter<V> implements Presenter<V> {
         }
 
         Disposable disposable = newThread2main(observable)
+                .filter(new Predicate() {
+                    @Override
+                    public boolean test(Object o) throws Exception {
+                        if (itestinFilter!=null){
+                            itestinFilter.testInfilter(o);
+                        }
+                        return true;
+                    }
+                })
                 .subscribe(new Consumer() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
