@@ -14,12 +14,8 @@ public interface IMainView {
 
     void hideLoading();
 
-    //模拟不同的接口
-    void getSecondSuccess(MainBean model);
+    void filter(MainBean model);
 
-    void getSecondFail(String msg);
-
-    //模拟不同的接口
-    void getSecondSuccess(Root model);
+    void doOnNext(MainBean model);
 
 }

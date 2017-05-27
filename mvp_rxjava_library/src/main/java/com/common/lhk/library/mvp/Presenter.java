@@ -1,6 +1,6 @@
 package com.common.lhk.library.mvp;
 
-public interface Presenter<V> {
+interface Presenter<V> {
 
     /**
      * 绑定View的接口

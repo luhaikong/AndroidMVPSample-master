@@ -26,6 +26,9 @@ import java.util.Map;
 
 /**
  * 处理程序中未捕获的异常，将异常写入日志文件
+ * 使用方法：
+ * 在Application类或其子类中调用即可
+ * CrashHandler.getInstance(this);
  */
 public class CrashHandler implements UncaughtExceptionHandler {
 	public static final String TAG = CrashHandler.class.getSimpleName();

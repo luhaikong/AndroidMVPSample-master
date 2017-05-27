@@ -10,17 +10,20 @@ import com.common.lhk.library.rxjava.SubscriberCallBackObserver;
 import com.wuxiaolong.androidmvpsample.retrofit.ApiStores;
 import com.wuxiaolong.androidmvpsample.retrofit.AppClient;
 
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
 
 public class MainPresenter extends BasePresenter<IMainView> {
 
     private ApiStores apiStores;
-    private ResourceSubscriber subscriber;
     private IMainView onMainView;
-    private boolean isFlowAble = true;
+    private boolean isFlowAble = false;
 
     @Override
     public void attachView(IMainView view) {
@@ -33,7 +36,6 @@ public class MainPresenter extends BasePresenter<IMainView> {
         this.onMainView = null;
     }
 
-
     public MainPresenter(IMainView view, Context context) {
         super(view);
         apiStores = AppClient.retrofit(context).create(ApiStores.class);
@@ -45,9 +47,8 @@ public class MainPresenter extends BasePresenter<IMainView> {
      */
     public void loadData(String cityId) {
         onMainView.showLoading();
-        if (!isFlowAble){
-            Observable<MainBean> observable = apiStores.loadData(cityId);
-            Observer observer = new SubscriberCallBackObserver<>(new ApiCallbackAdapter<MainBean>() {
+        if (isFlowAble){
+            ResourceSubscriber subscriber = new SubscriberCallBackFlowable<>(new ApiCallbackAdapter<MainBean>() {
                 @Override
                 public void onSuccess(MainBean model) {
                     onMainView.getDataSuccess(model);
@@ -63,10 +64,33 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     onMainView.hideLoading();
                 }
             });
-            addioSubscription(observable, observer);
+            apiStores.loadFlowableData(cityId)
+                    .doOnNext(new Consumer<MainBean>() {
+                        @Override
+                        public void accept(MainBean mainBean) throws Exception {
+                            Log.d("OnNext-io",mainBean.getWeatherinfo().toString());
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Predicate<MainBean>() {
+                        @Override
+                        public boolean test(MainBean o) throws Exception {
+                            onMainView.filter(o);
+                            return true;
+                        }
+                    })
+                    .doOnNext(new Consumer<MainBean>() {
+                        @Override
+                        public void accept(MainBean mainBean) throws Exception {
+                            Log.d("OnNext-main",mainBean.getWeatherinfo().toString());
+                            onMainView.doOnNext(mainBean);
+                        }
+                    })
+                    .subscribe(subscriber);
+            addSubscription(subscriber);
         } else {
-            Flowable<MainBean> flowAble = apiStores.loadFlowableData(cityId);
-            subscriber = new SubscriberCallBackFlowable<>(new ApiCallbackAdapter<MainBean>() {
+            final Observer observer = new SubscriberCallBackObserver<>(new ApiCallbackAdapter<MainBean>() {
                 @Override
                 public void onSuccess(MainBean model) {
                     onMainView.getDataSuccess(model);
@@ -82,88 +106,53 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     onMainView.hideLoading();
                 }
             });
-            addioSubscription(flowAble, subscriber);
+            apiStores.loadData(cityId)
+                    .doOnNext(new Consumer<MainBean>() {
+                        @Override
+                        public void accept(MainBean mainBean) throws Exception {
+                            Log.d("doOnNext-io",mainBean.getWeatherinfo().toString());
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Predicate<MainBean>() {
+                        @Override
+                        public boolean test(MainBean o) throws Exception {
+                            onMainView.filter(o);
+                            return true;
+                        }
+                    })
+                    .doOnNext(new Consumer<MainBean>() {
+                        @Override
+                        public void accept(MainBean o) throws Exception {
+                            Log.d("doOnNext-main",o.getWeatherinfo().toString());
+                            onMainView.doOnNext(o);
+                        }
+                    })
+                    .subscribe(new Consumer<MainBean>() {
+                        @Override
+                        public void accept(MainBean o) throws Exception {
+                            observer.onNext(o);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            observer.onError(throwable);
+                        }
+                    }, new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            observer.onComplete();
+                        }
+                    }, new Consumer<Disposable>() {
+                        @Override
+                        public void accept(Disposable disposable) throws Exception {
+                            observer.onSubscribe(disposable);
+                            addSubscription(disposable);
+                        }
+                    });
         }
 
-    }
-
-    @Override
-    protected void unSubscribe() {
-        super.unSubscribe();
-        if (subscriber!=null&&!subscriber.isDisposed()){
-            subscriber.dispose();
-            Log.d("Main","unSubscribe");
-        }
-    }
-
-    /**
-     * 模拟不同的接口
-     * @param cityId
-     */
-    public void loadSecondData(String cityId){
-        onMainView.showLoading();
-        if (apiStores!=null)
-        addioSubscription(apiStores.loadData(cityId),
-                new SubscriberCallBackObserver<>(new ApiCallbackAdapter<MainBean>() {
-                    @Override
-                    public void onSuccess(MainBean model) {
-                        onMainView.getSecondSuccess(model);
-                    }
-
-                    @Override
-                    public void onFailure(int code, String msg) {
-                        onMainView.getSecondFail(msg);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        onMainView.hideLoading();
-                    }
-                }));
-    }
-    
-    public void loadData(){
-        onMainView.showLoading();
-        if (apiStores!=null)
-        addioSubscription(apiStores.loadData("feec2e995632ec4329ec4591bdd7c20b","sf","575677355677"),
-                new SubscriberCallBackObserver<>(new ApiCallbackAdapter<Root>() {
-                    @Override
-                    public void onSuccess(Root model) {
-                        onMainView.getSecondSuccess(model);
-                    }
-
-                    @Override
-                    public void onFailure(int code, String msg) {
-                        onMainView.getSecondFail(msg);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        onMainView.hideLoading();
-                    }
-                }));
-    }
-    
-    public void postData(){
-        onMainView.showLoading();
-        if (apiStores!=null)
-        addioSubscription(apiStores.postData("feec2e995632ec4329ec4591bdd7c20b","sf","575677355677"),
-                new SubscriberCallBackObserver<>(new ApiCallbackAdapter<Root>() {
-                    @Override
-                    public void onSuccess(Root model) {
-                        onMainView.getSecondSuccess(model);
-                    }
-
-                    @Override
-                    public void onFailure(int code, String msg) {
-                        onMainView.getSecondFail(msg);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        onMainView.hideLoading();
-                    }
-                }));
     }
 
 }

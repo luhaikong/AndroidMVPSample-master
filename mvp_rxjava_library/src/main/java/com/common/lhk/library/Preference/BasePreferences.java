@@ -4,11 +4,16 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import java.util.Set;
 
+/**
+ * 使用方法：
+ * SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+ * BasePreferences basePreferences = new BasePreferences(preferences);
+ */
 public class BasePreferences {
 
-    protected SharedPreferences mPreferences;
+    private SharedPreferences mPreferences;
 
-    protected BasePreferences(SharedPreferences sharedPreferences) {
+    public BasePreferences(SharedPreferences sharedPreferences) {
         mPreferences = sharedPreferences;
     }
 

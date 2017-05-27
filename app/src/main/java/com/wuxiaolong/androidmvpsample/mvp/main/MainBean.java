@@ -141,5 +141,23 @@ public class MainBean {
         public void setQy(String qy) {
             this.qy = qy;
         }
+
+        @Override
+        public String toString() {
+            return "WeatherinfoBean{" +
+                    "city='" + city + '\'' +
+                    ", cityid='" + cityid + '\'' +
+                    ", temp='" + temp + '\'' +
+                    ", WD='" + WD + '\'' +
+                    ", WS='" + WS + '\'' +
+                    ", SD='" + SD + '\'' +
+                    ", WSE='" + WSE + '\'' +
+                    ", time='" + time + '\'' +
+                    ", isRadar='" + isRadar + '\'' +
+                    ", Radar='" + Radar + '\'' +
+                    ", njd='" + njd + '\'' +
+                    ", qy='" + qy + '\'' +
+                    '}';
+        }
     }
 }

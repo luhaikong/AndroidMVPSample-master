@@ -4,6 +4,11 @@ import android.os.Environment;
 
 import java.io.File;
 
+/**
+ * 使用方法：
+ * 1、在Application类或其子类中调用进行初始化,AppDataFile.init(“根路径”);
+ * 2、使用时直接File file = AppDataFile.getCacheFile();
+ */
 public class AppDataFile {
 
     private File sdcard = Environment.getExternalStorageDirectory();
@@ -83,8 +88,12 @@ public class AppDataFile {
         return file;
     }
 
-    public static File getAppFile(){
-        return mAppDataFile.mAppFile;
+    private static File getAppFile(){
+		if (mAppDataFile.mAppFile != null) {
+			return mAppDataFile.mAppFile;
+		} else {
+			throw new IllegalStateException("AppDataFile未初始化");
+		}
     }
 
 	/**

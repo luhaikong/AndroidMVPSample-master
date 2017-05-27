@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.common.lhk.library.mvp.MvpActivity;
+import com.wuxiaolong.androidmvpsample.mvp.main.IMainView;
 import com.wuxiaolong.androidmvpsample.mvp.main.MainBean;
 import com.wuxiaolong.androidmvpsample.mvp.main.MainPresenter;
-import com.wuxiaolong.androidmvpsample.mvp.main.IMainView;
-import com.wuxiaolong.androidmvpsample.mvp.main.Root;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,7 +27,8 @@ public class MainActivity extends MvpActivity<MainPresenter>
 
     @Override
     protected MainPresenter createPresenter() {
-        return new MainPresenter(this,this);
+        super.mvpPresenter = new MainPresenter(this,this);
+        return mvpPresenter;
     }
 
     @Override
@@ -37,9 +38,6 @@ public class MainActivity extends MvpActivity<MainPresenter>
         ButterKnife.bind(this);
         //请求接口
         mvpPresenter.loadData("101010100");
-        //mvpPresenter.loadSecondData("101290101");
-        //mvpPresenter.loadData();
-//        mvpPresenter.postData();
     }
 
     @Override
@@ -50,33 +48,12 @@ public class MainActivity extends MvpActivity<MainPresenter>
                 + getResources().getString(R.string.wd) + weatherinfo.getWD()
                 + getResources().getString(R.string.ws) + weatherinfo.getWS()
                 + getResources().getString(R.string.time) + weatherinfo.getTime();
-        text.setText(showData);
+        text.append(showData);
     }
 
     @Override
     public void getDataFail(String msg) {
         toastShow("网络不给力");
-    }
-
-    @Override
-    public void getSecondSuccess(MainBean model) {
-        //接口成功回调
-        MainBean.WeatherinfoBean weatherinfo = model.getWeatherinfo();
-        String showData = getResources().getString(R.string.city) + weatherinfo.getCity()
-                + getResources().getString(R.string.wd) + weatherinfo.getWD()
-                + getResources().getString(R.string.ws) + weatherinfo.getWS()
-                + getResources().getString(R.string.time) + weatherinfo.getTime();
-        second.setText(showData);
-    }
-
-    @Override
-    public void getSecondFail(String msg) {
-        toastShow(msg);
-    }
-
-    @Override
-    public void getSecondSuccess(Root model) {
-        second.setText(model.toString());
     }
 
     @Override
@@ -89,6 +66,16 @@ public class MainActivity extends MvpActivity<MainPresenter>
         mProgressBar.setVisibility(View.GONE);
     }
 
+    @Override
+    public void filter(MainBean model) {
+        Toast.makeText(mBaseContext,"我正在主线程中过滤一些数据",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void doOnNext(MainBean model) {
+        Toast.makeText(mBaseContext,"我正在主线程中做一些操作",Toast.LENGTH_LONG).show();
+    }
+
     @OnClick({R.id.text,R.id.second})
     public void onClick(View v){
         
@@ -99,4 +86,5 @@ public class MainActivity extends MvpActivity<MainPresenter>
         ButterKnife.unbind(this);
         super.onDestroy();
     }
+
 }
