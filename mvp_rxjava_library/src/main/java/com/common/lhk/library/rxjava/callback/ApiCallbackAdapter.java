@@ -1,4 +1,6 @@
-package com.common.lhk.library.rxjava;
+package com.common.lhk.library.rxjava.callback;
+
+import com.common.lhk.library.rxjava.callback.ApiCallback;
 
 import io.reactivex.disposables.Disposable;
 

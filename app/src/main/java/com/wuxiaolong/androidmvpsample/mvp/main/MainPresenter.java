@@ -4,19 +4,18 @@ import android.content.Context;
 import android.util.Log;
 
 import com.common.lhk.library.mvp.BasePresenter;
-import com.common.lhk.library.rxjava.ApiCallbackAdapter;
-import com.common.lhk.library.rxjava.SubscriberCallBackFlowable;
-import com.common.lhk.library.rxjava.SubscriberCallBackObserver;
+import com.common.lhk.library.rxjava.callback.ApiCallbackAdapter;
+import com.common.lhk.library.rxjava.callback.SubscriberCallBackFlowable;
+import com.common.lhk.library.rxjava.callback.SubscriberCallBackObserver;
+import com.common.lhk.library.rxjava.schedulers.SchedulersCompat;
 import com.wuxiaolong.androidmvpsample.retrofit.ApiStores;
 import com.wuxiaolong.androidmvpsample.retrofit.AppClient;
 
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
 
 public class MainPresenter extends BasePresenter<IMainView> {
@@ -71,8 +70,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                             Log.d("OnNext-io",mainBean.getWeatherinfo().toString());
                         }
                     })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(SchedulersCompat.<MainBean>applyIoFlowableSchedulers())
                     .filter(new Predicate<MainBean>() {
                         @Override
                         public boolean test(MainBean o) throws Exception {
@@ -113,8 +111,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                             Log.d("doOnNext-io",mainBean.getWeatherinfo().toString());
                         }
                     })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(SchedulersCompat.<MainBean>applyIoSchedulers())
                     .filter(new Predicate<MainBean>() {
                         @Override
                         public boolean test(MainBean o) throws Exception {

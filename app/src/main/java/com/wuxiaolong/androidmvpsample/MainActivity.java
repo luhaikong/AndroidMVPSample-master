@@ -37,7 +37,7 @@ public class MainActivity extends MvpActivity<MainPresenter>
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         //请求接口
-        mvpPresenter.loadData("101010100");
+        mvpPresenter.loadData("101010100");//昆明：101290101，北京：101010100
     }
 
     @Override

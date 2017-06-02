@@ -1,4 +1,4 @@
-package com.common.lhk.library.rxjava;
+package com.common.lhk.library.rxjava.callback;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
