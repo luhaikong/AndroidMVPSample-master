@@ -8,21 +8,21 @@ import android.widget.Toast;
 
 import com.common.lhk.library.mvp.MvpActivity;
 import com.wuxiaolong.androidmvpsample.mvp.main.IMainView;
-import com.wuxiaolong.androidmvpsample.mvp.main.MainBean;
+import com.wuxiaolong.androidmvpsample.entity.MainBean;
 import com.wuxiaolong.androidmvpsample.mvp.main.MainPresenter;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends MvpActivity<MainPresenter>
         implements IMainView {
 
-    @Bind(R.id.text)
+    @BindView(R.id.text)
     TextView text;
-    @Bind(R.id.second)
+    @BindView(R.id.second)
     TextView second;
-    @Bind(R.id.mProgressBar)
+    @BindView(R.id.mProgressBar)
     ProgressBar mProgressBar;
 
     @Override
@@ -79,12 +79,6 @@ public class MainActivity extends MvpActivity<MainPresenter>
     @OnClick({R.id.text,R.id.second})
     public void onClick(View v){
         
-    }
-
-    @Override
-    protected void onDestroy() {
-        ButterKnife.unbind(this);
-        super.onDestroy();
     }
 
 }

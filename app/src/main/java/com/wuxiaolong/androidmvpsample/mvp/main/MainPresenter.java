@@ -8,6 +8,7 @@ import com.common.lhk.library.rxjava.callback.ApiCallbackAdapter;
 import com.common.lhk.library.rxjava.callback.SubscriberCallBackFlowable;
 import com.common.lhk.library.rxjava.callback.SubscriberCallBackObserver;
 import com.common.lhk.library.rxjava.schedulers.SchedulersCompat;
+import com.wuxiaolong.androidmvpsample.entity.MainBean;
 import com.wuxiaolong.androidmvpsample.retrofit.ApiStores;
 import com.wuxiaolong.androidmvpsample.retrofit.AppClient;
 

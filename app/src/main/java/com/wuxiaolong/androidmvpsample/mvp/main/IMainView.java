@@ -1,5 +1,7 @@
 package com.wuxiaolong.androidmvpsample.mvp.main;
 
+import com.wuxiaolong.androidmvpsample.entity.MainBean;
+
 /**
  * Created by lhk on 2015/9/23.
  * 处理业务需要哪些方法

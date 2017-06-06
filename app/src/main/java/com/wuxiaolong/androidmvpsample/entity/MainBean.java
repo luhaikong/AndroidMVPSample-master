@@ -1,4 +1,4 @@
-package com.wuxiaolong.androidmvpsample.mvp.main;
+package com.wuxiaolong.androidmvpsample.entity;
 
 /**
  * Created by WuXiaolong on 2015/9/23.
