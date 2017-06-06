@@ -5,9 +5,12 @@ import android.content.Context;
 import com.wuxiaolong.androidmvpsample.BuildConfig;
 
 import java.io.File;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
+import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -22,6 +25,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class AppClient {
     private static final long DEFAULT_TIMEOUT = 15;
     private static Retrofit mRetrofit;
+    private static CookieManager cookieManager;
 
     public static Retrofit retrofit(Context context) {
         if (mRetrofit == null) {
@@ -51,6 +55,10 @@ public class AppClient {
             //设置 Debug Log 模式
             httpClient.addInterceptor(loggingInterceptor);
         }
+        //设置cookie管理
+        cookieManager = (cookieManager != null ? cookieManager : new CookieManager());
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        httpClient.cookieJar(new JavaNetCookieJar(cookieManager));
         return httpClient.build();
     }
 
@@ -76,7 +84,15 @@ public class AppClient {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             httpClient.addInterceptor(logging);
         }
+
+        //设置cookie管理
+        cookieManager = (cookieManager != null ? cookieManager : new CookieManager());
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        httpClient.cookieJar(new JavaNetCookieJar(cookieManager));
         return httpClient.build();
     }
 
+    public static CookieManager getCookieManager() {
+        return cookieManager;
+    }
 }
