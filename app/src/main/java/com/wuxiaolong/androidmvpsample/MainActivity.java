@@ -29,6 +29,8 @@ public class MainActivity extends MvpActivity<MainPresenter>
     protected MainPresenter createPresenter() {
         super.mvpPresenter = new MainPresenter(this,this);
         return mvpPresenter;
+
+
     }
 
     @Override
