@@ -119,6 +119,8 @@
 
 # Okhttp3
 -dontwarn okio.**
+-dontwarn okhttp3.internal.huc.DelegatingHttpsURLConnection
+-dontwarn okhttp3.internal.huc.OkHttpsURLConnection
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
 

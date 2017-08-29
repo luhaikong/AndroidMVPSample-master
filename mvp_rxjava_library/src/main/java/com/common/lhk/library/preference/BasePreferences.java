@@ -1,4 +1,4 @@
-package com.common.lhk.library.Preference;
+package com.common.lhk.library.preference;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;

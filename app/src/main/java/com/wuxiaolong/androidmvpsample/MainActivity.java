@@ -27,10 +27,8 @@ public class MainActivity extends MvpActivity<MainPresenter>
 
     @Override
     protected MainPresenter createPresenter() {
-        super.mvpPresenter = new MainPresenter(this,this);
+        mvpPresenter = new MainPresenter(this,this);
         return mvpPresenter;
-
-
     }
 
     @Override
@@ -80,7 +78,7 @@ public class MainActivity extends MvpActivity<MainPresenter>
 
     @OnClick({R.id.text,R.id.second})
     public void onClick(View v){
-        
+
     }
 
 }
