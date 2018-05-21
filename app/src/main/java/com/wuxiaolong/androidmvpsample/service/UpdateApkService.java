@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.wuxiaolong.androidmvpsample.R;
 
@@ -80,7 +81,19 @@ public class UpdateApkService extends Service {
             String data = intent.getStringExtra("data");
             if (data!=null){
                 // 调用下载
-                initDownManager(data);
+                try{
+                    initDownManager(data);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    try {
+                        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                        Intent intent0 = new Intent(Intent.ACTION_VIEW, uri);
+                        intent0.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent0);
+                    } catch (Exception ex) {
+                        Toast.makeText(getApplicationContext(),"下载失败",Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -95,8 +108,9 @@ public class UpdateApkService extends Service {
     @Override
     public void onDestroy() {
         // 注销下载广播
-        if (receiver != null)
+        if (receiver != null){
             unregisterReceiver(receiver);
+        }
         super.onDestroy();
     }
 
@@ -134,7 +148,7 @@ public class UpdateApkService extends Service {
             intents.addCategory("android.intent.category.DEFAULT");
             intents.setType("application/vnd.android.package-archive");
             intents.setData(apk);
-            intents.setDataAndType(apk, "application/vnd.android.package-archive");
+            intents.setDataAndType(apk,"application/vnd.android.package-archive");
             intents.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             //android.os.Process.killProcess(android.os.Process.myPid());
             // 如果不加上这句的话在apk安装完成之后点击打开会崩溃

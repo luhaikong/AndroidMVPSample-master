@@ -11,18 +11,11 @@ import com.wuxiaolong.androidmvpsample.mvp.main.IMainView;
 import com.wuxiaolong.androidmvpsample.entity.MainBean;
 import com.wuxiaolong.androidmvpsample.mvp.main.MainPresenter;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class MainActivity extends MvpActivity<MainPresenter>
         implements IMainView {
 
-    @BindView(R.id.text)
     TextView text;
-    @BindView(R.id.second)
     TextView second;
-    @BindView(R.id.mProgressBar)
     ProgressBar mProgressBar;
 
     @Override
@@ -35,7 +28,9 @@ public class MainActivity extends MvpActivity<MainPresenter>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        text = getViewById(R.id.text);
+        second = getViewById(R.id.second);
+        mProgressBar = getViewById(R.id.mProgressBar);
         //请求接口
         mvpPresenter.loadData("101010100");//昆明：101290101，北京：101010100
     }
@@ -74,11 +69,6 @@ public class MainActivity extends MvpActivity<MainPresenter>
     @Override
     public void doOnNext(MainBean model) {
         Toast.makeText(mBaseContext,"我正在主线程中做一些操作",Toast.LENGTH_LONG).show();
-    }
-
-    @OnClick({R.id.text,R.id.second})
-    public void onClick(View v){
-
     }
 
 }
