@@ -29,7 +29,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBaseContext = this;
         mActivity = this;
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermission(str_Storage);
         }
     }
