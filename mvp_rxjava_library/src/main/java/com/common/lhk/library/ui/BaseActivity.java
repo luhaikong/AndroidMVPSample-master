@@ -18,7 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     private static final int Storage_Permission = 0x01;
     private static final String[] str_Storage = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
     public Context mBaseContext;
@@ -31,6 +31,8 @@ public class BaseActivity extends AppCompatActivity {
         mActivity = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermission(str_Storage);
+        } else {
+            doSomeThings();
         }
     }
 
@@ -77,12 +79,15 @@ public class BaseActivity extends AppCompatActivity {
         if (requestCode == Storage_Permission) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //权限被用户同意,做相应的事情
+                doSomeThings();
             } else {
                 //权限被用户拒绝，做相应事情
                 requestPermission(permissions);
             }
         }
     }
+
+    protected abstract void doSomeThings();
 
     public void toastShow(int resId) {
         Toast.makeText(mBaseContext, resId, Toast.LENGTH_SHORT).show();

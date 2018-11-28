@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -28,6 +30,8 @@ public class MainActivity extends MvpActivity<MainPresenter>
     TextView second;
     ProgressBar mProgressBar;
     Button btnDownload;
+
+    int REQUEST_CODE_UNKNOWN_APP = 100;
 
     @Override
     protected MainPresenter createPresenter() {
@@ -54,13 +58,47 @@ public class MainActivity extends MvpActivity<MainPresenter>
         mvpPresenter.loadData("101010100");//昆明：101290101，北京：101010100
     }
 
+    @Override
+    protected void doSomeThings() {
+
+    }
+
     private void startDownLoadApk(String apkurl) {
         if (apkurl != null) {
-            Intent intent = new Intent(this, UpdateApkService.class);
-            intent.putExtra("data", apkurl);
-            startService(intent);
+            if (Build.VERSION.SDK_INT >= 26) {
+                boolean hasInstallPermission = getPackageManager().canRequestPackageInstalls();
+                if (hasInstallPermission) {
+                    //安装应用
+                    downloadAndInstall(apkurl);
+                } else {
+                    //跳转至“安装未知应用”权限界面，引导用户开启权限
+                    Uri selfPackageUri = Uri.parse("package:" + this.getPackageName());
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, selfPackageUri);
+                    startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP);
+                }
+            } else {
+                //安装应用
+                downloadAndInstall(apkurl);
+            }
         } else {
             Toast.makeText(mBaseContext,"下载地址不正确!!!",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * 下载并直接安装
+     */
+    private void downloadAndInstall(String apkurl){
+        Intent intent = new Intent(this, UpdateApkService.class);
+        intent.putExtra("data", apkurl);
+        startService(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_UNKNOWN_APP) {
+            downloadAndInstall("http://220.163.103.24/ydyw/upload/appywhd.apk");
         }
     }
 

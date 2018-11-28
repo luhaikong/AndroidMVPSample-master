@@ -5,7 +5,7 @@ package com.common.lhk.library.mvp;
  * 当不想使用 MVP 模式时继承该基类
  */
 
-public class MvpNActivity extends MvpActivity {
+public abstract class MvpNActivity extends MvpActivity {
     @Override
     protected BasePresenter createPresenter() {
         return null;
