@@ -11,12 +11,22 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.common.lhk.library.R;
 
 /**
- * Author: liuqiang
- * Time: 2018-01-02 13:28
- * Description:
+ * new AlertDialog(MainActivity.this).builder().setTitle("退出当前账号")
+ * .setMsg("再连续登陆15天，就可变身为QQ达人。退出QQ可能会使你现有记录归零，确定退出？")
+ * .setPositiveButton("确认退出", new OnClickListener() {
+ *
+ * @Override public void onClick(View v) {
+ * <p>
+ * }
+ * }).setNegativeButton("取消", new OnClickListener() {
+ * @Override public void onClick(View v) {
+ * <p>
+ * }
+ * }).show();
  */
 public class AlertDialog {
     private Context context;

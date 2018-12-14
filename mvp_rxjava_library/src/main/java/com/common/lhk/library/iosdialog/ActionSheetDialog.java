@@ -19,9 +19,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Author: liuqiang
- * Time: 2018-01-02 13:28
- * Description:
+ * 法一：
+ * new ActionSheetDialog(MainActivity.this)
+ * .builder()
+ * .setTitle("清空消息列表后，聊天记录依然保留，确定要清空消息列表？")
+ * .setCancelable(false)
+ * .setCanceledOnTouchOutside(false)
+ * .addSheetItem("清空消息列表", SheetItemColor.Red,
+ * new OnSheetItemClickListener() {
+ *
+ * @Override public void onClick(int which) {
+ * <p>
+ * }
+ * }).show();
+ * <p>
+ *
+ * 法二：
+ * new ActionSheetDialog(MainActivity.this)
+ * .builder()
+ * .setTitle("请选择操作")
+ * .setCancelable(false)
+ * .setCanceledOnTouchOutside(false)
+ * .addSheetItem("条目一", SheetItemColor.Blue,
+ * new OnSheetItemClickListener() {
+ * @Override public void onClick(int which) {
+ * Toast.makeText(MainActivity.this,
+ * "item" + which, Toast.LENGTH_SHORT)
+ * .show();
+ * }
+ * })
+ * .addSheetItem("条目二", SheetItemColor.Blue,
+ * new OnSheetItemClickListener() {
+ * @Override public void onClick(int which) {
+ * Toast.makeText(MainActivity.this,
+ * "item" + which, Toast.LENGTH_SHORT)
+ * .show();
+ * }
+ * })
+ * .addSheetItem("条目三", SheetItemColor.Blue,
+ * new OnSheetItemClickListener() {
+ * @Override public void onClick(int which) {
+ * Toast.makeText(MainActivity.this,
+ * "item" + which, Toast.LENGTH_SHORT)
+ * .show();
+ * }
+ * }).show();
  */
 public class ActionSheetDialog {
     private Context context;
@@ -93,11 +135,8 @@ public class ActionSheetDialog {
     }
 
     /**
-     *
-     * @param strItem
-     *            条目名称
-     * @param color
-     *            条目字体颜色，设置null则默认蓝色
+     * @param strItem  条目名称
+     * @param color    条目字体颜色，设置null则默认蓝色
      * @param listener
      * @return
      */
@@ -110,7 +149,9 @@ public class ActionSheetDialog {
         return this;
     }
 
-    /** 设置条目布局 */
+    /**
+     * 设置条目布局
+     */
     private void setSheetItems() {
         if (sheetItemList == null || sheetItemList.size() <= 0) {
             return;
