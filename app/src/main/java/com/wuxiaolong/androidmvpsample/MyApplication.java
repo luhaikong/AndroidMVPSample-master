@@ -7,7 +7,7 @@ import com.common.lhk.library.files.AppDataFile;
  * Created by MyPC on 2018/5/21.
  */
 
-public class MyApplicaition extends BaseApplication {
+public class MyApplication extends BaseApplication {
 
     @Override
     public void onCreate() {
