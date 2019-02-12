@@ -13,5 +13,6 @@ public class MyApplication extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         AppDataFile.init("mvpsample");
+        this.registerComponentCallbacks(new MemoryCallBack());
     }
 }
