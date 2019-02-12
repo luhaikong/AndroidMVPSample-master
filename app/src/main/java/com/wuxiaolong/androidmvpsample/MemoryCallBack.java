@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 
 /**
  * Created by Administrator on 2019/2/12.
+ * 【内存优化】
  * 通过 Context.registerComponentCallbacks() 注册。
  * 注册后，就会被系统回调到。
  */
