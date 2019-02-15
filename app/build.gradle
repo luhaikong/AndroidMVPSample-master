@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 27
@@ -6,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.wuxiaolong.androidmvpsample"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 20
         versionName "2.0"
@@ -25,6 +26,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            res.srcDirs = ['src/main/res']
+        }
+    }
 }
 
 dependencies {
@@ -34,8 +40,33 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
 
-//    compile 'com.wuxiaolong.androidutils:androidutils:1.0.2'
     compile project(':mvp_rxjava_library')
+
+    compile 'skin.support:skin-support:3.1.1'
+    compile 'skin.support:skin-support-design:3.1.1'
+    compile 'skin.support:skin-support-constraint-layout:3.1.1'
+    compile 'skin.support:skin-support-cardview:3.1.1'
+
+    compile 'com.android.support:cardview-v7:27.1.1'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
+    compile 'com.android.support:support-vector-drawable:27.1.1'
+
+    compile 'com.github.bumptech.glide:glide:4.7.1'
+    apt "com.github.bumptech.glide:compiler:4.7.1"
+
+    // 第三方控件库换肤支持
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'skin.support:circleimageview:2.1.0.1'
+    compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    compile 'skin.support:flycotablayout:2.1.2'
+
+    // maven { url 'https://jitpack.io' }
+//    compile 'com.github.MingYueChunQiu:RecorderManager:0.2.3'//仿微信视频录制
+    compile 'com.github.yhaolpz:FloatWindow:1.0.9'//可拖动悬浮窗
+    compile 'top.zibin:Luban:1.1.3'
+    compile 'com.lqr.emoji:library:1.0.2'
+    compile 'com.lqr.audio:library:1.0.0'
+    compile 'com.lhk:safekeyboard:1.0.0'
 }
 
 buildscript {
