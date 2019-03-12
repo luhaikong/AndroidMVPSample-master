@@ -1,6 +1,7 @@
 package com.wuxiaolong.androidmvpsample.retrofit;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.wuxiaolong.androidmvpsample.BuildConfig;
 
@@ -50,7 +51,19 @@ public class AppClient {
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         if (BuildConfig.DEBUG) {
             // Log信息拦截器
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                @Override
+                public void log(String xml) {
+                    //打印retrofit日志
+                    for (int i = 0; i < xml.length(); i += 3000) {
+                        if (i + 3000 < xml.length()) {
+                            Log.i("RetrofitLog", xml.substring(i, i + 3000));
+                        } else {
+                            Log.i("RetrofitLog", xml.substring(i, xml.length()));
+                        }
+                    }
+                }
+            });
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             //设置 Debug Log 模式
             httpClient.addInterceptor(loggingInterceptor);
@@ -80,7 +93,19 @@ public class AppClient {
 
         //网络请求日志
         if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                @Override
+                public void log(String xml) {
+                    //打印retrofit日志
+                    for (int i = 0; i < xml.length(); i += 3000) {
+                        if (i + 3000 < xml.length()) {
+                            Log.i("RetrofitLog", xml.substring(i, i + 3000));
+                        } else {
+                            Log.i("RetrofitLog", xml.substring(i, xml.length()));
+                        }
+                    }
+                }
+            });
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             httpClient.addInterceptor(logging);
         }
