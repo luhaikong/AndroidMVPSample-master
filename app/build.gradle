@@ -65,7 +65,7 @@ dependencies {
     compile 'com.github.yhaolpz:FloatWindow:1.0.9'//可拖动悬浮窗
     compile 'top.zibin:Luban:1.1.3'
     compile 'com.lqr.emoji:library:1.0.2'
-    compile 'com.lqr.audio:library:1.0.0'
+//    compile 'com.lqr.audio:library:1.0.0'
     compile 'com.lhk:safekeyboard:1.0.0'
     compile 'com.orhanobut:logger:2.2.0'
 }
