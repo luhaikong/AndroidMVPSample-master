@@ -87,6 +87,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 当系统版本小于安卓6.0时，不需要申请系统权限
+     */
     protected abstract void doSomeThings();
 
     public void toastShow(int resId) {
