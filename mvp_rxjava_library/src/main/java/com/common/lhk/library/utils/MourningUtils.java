@@ -9,6 +9,7 @@ import android.view.View;
 /**
  * Created by Administrator on 2020/4/8.
  * 全国哀悼日 界面颜色变 灰
+ * 使用方法：在需要改变主题色的Activity中使用该方法
  */
 
 public class MourningUtils {
