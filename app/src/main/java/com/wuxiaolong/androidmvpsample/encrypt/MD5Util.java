@@ -1,7 +1,6 @@
-package com.wuxiaolong.androidmvpsample.utils;
+package com.wuxiaolong.androidmvpsample.encrypt;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -30,7 +29,6 @@ public class MD5Util {
      * @Date 2019/03/09
      * @Author 杨俊刚
      * @Desc 按指定编码类型计算摘要
-     * @param str
      * @param str
      * @param charset
      * @return
