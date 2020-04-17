@@ -26,7 +26,7 @@ public class Bitmap2FileUtil {
      * @throws IOException
      */
     public File saveFile(Bitmap bm, String fileName, Context context) throws IOException {
-        String cachePath;//文件保存地址，可自定义
+        String cachePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();//文件保存地址，可自定义
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || !Environment.isExternalStorageRemovable()) {
             ///sdcard/Android/data/<application package>/cache
