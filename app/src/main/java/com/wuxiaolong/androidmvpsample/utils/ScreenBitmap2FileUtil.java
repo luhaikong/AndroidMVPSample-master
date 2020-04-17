@@ -19,6 +19,7 @@ import java.io.IOException;
 
 /**
  * Created by Administrator on 2020/4/17.
+ * 截屏并保存的 工具类
  */
 
 public class ScreenBitmap2FileUtil {
