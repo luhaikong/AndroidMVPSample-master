@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.BuildConfig;
+import com.orhanobut.logger.CsvFormatStrategy;
+import com.orhanobut.logger.DiskLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
@@ -17,12 +19,23 @@ public class LogUtil {
     private static final String customTag = "-WZT-";
 
     public static void initLogger() {
+        if (BuildConfig.DEBUG){
+            initLoggerPretty();
+        } else {
+            initLoggerCsv();//日志文件存储在SD卡的logger文件夹下
+        }
+    }
+
+    /**
+     * 调试时，打印日志
+     */
+    private static void initLoggerPretty() {
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
-                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
-                .methodCount(0)         // (Optional) How many method line to show. Default 2
-                .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
-                //.logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
-                .tag(customTag)   // (Optional) Global tag for every log. Default PRETTY_LOGGER
+                .showThreadInfo(false)
+                .methodCount(0)
+                .methodOffset(7)
+                //.logStrategy(customLog)
+                .tag(customTag)
                 .build();
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
             @Override
@@ -30,6 +43,16 @@ public class LogUtil {
                 return BuildConfig.DEBUG;
             }
         });
+    }
+
+    /**
+     * 运行时生成日志文件
+     */
+    private static void initLoggerCsv(){
+        FormatStrategy formatStrategy = CsvFormatStrategy.newBuilder()
+                .tag(customTag)
+                .build();
+        Logger.addLogAdapter(new DiskLogAdapter(formatStrategy));
     }
 
     public static void d(String message) {
@@ -105,6 +128,9 @@ public class LogUtil {
 
     /**
      * 添加space
+     *
+     * @param sb
+     * @param indent
      */
     private static void addIndentBlank(StringBuilder sb, int indent) {
         for (int i = 0; i < indent; i++) {
